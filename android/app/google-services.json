@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "57473647967",
+    "project_id": "new-time-tracker-course",
+    "storage_bucket": "new-time-tracker-course.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:57473647967:android:d650492304c8012855a2ea",
+        "android_client_info": {
+          "package_name": "com.example.new_time_tracker_course"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "57473647967-cas69aa4g987ptl32ne8jkb72p9ps15f.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.new_time_tracker_course",
+            "certificate_hash": "ba44ebd42116483adc9def05585be83de7829c99"
+          }
+        },
+        {
+          "client_id": "57473647967-t7kh8qu9pp07al3tphnvoo3lua7fm3oi.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDHpQTk3u5tuYGinRIzUxCFW3Fr0mQrmfM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "57473647967-t7kh8qu9pp07al3tphnvoo3lua7fm3oi.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "57473647967-kc52b61g4jouju0sn8psai01om03fgm6.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.newTimeTrackerCourse"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
