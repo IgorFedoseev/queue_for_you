@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:new_time_tracker_course/app/home/schedule/andrea_entrie_page.dart';
+import 'package:new_time_tracker_course/app/home/schedule/edit_schedule_page.dart';
 import 'package:new_time_tracker_course/services/database.dart';
 import 'package:provider/provider.dart';
 
@@ -19,11 +19,11 @@ class SchedulePage extends StatelessWidget {
           ),
         ),
         backgroundColor: const Color.fromRGBO(3, 37, 65, 1),
-        elevation: 1.0,
+        elevation: 3.0,
       ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: const Color.fromRGBO(3, 37, 65, 1),
-        onPressed: () => EntryPage.show(context, database),
+        onPressed: () => EditSchedulePage.show(context, database),
         child: const Icon(
           Icons.add,
           color: Colors.white,

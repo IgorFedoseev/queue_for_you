@@ -44,7 +44,6 @@ class ProfilePage extends StatelessWidget {
         ),
         centerTitle: false,
         actions: <Widget>[
-
           IconButton(
             onPressed: () => _confirmSignOut(context),
             iconSize: 30,

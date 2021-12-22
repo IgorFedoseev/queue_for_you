@@ -114,8 +114,8 @@ class SignInPage extends StatelessWidget {
           SocialButton(
             text: 'Войти через Google+',
             fontColor: Colors.black87,
-            assetName: 'sign_in_images/google/g_logo.png',
-            logoPadding: 8.0,
+            assetName: 'sign_in_images/g_logo.png',
+            logoPadding: 7.0,
             onPressed: () => isLoading ? null : _signInWithGoogle(context),
           ),
           const SizedBox(
@@ -124,8 +124,8 @@ class SignInPage extends StatelessWidget {
           SocialButton(
             text: 'Войти через Facebook',
             fontColor: Colors.white,
-            assetName: 'sign_in_images/facebook/f_logo.png',
-            logoPadding: 3.0,
+            assetName: 'sign_in_images/f_logo.png',
+            logoPadding: 8.0,
             backgroundColor: const Color(0xDE3B5998),
             onPressed: () => isLoading ? null : _signInWithFacebook(context),
           ),
@@ -137,7 +137,7 @@ class SignInPage extends StatelessWidget {
             fontColor: Colors.white,
             assetName: 'sign_in_images/mail.png',
             backgroundColor: const Color(0xDE0C5FF9),
-            logoPadding: 12.0,
+            logoPadding: 9.0,
             onPressed: () => isLoading ? null : _signInWithEmail(context),
           ),
           const SizedBox(

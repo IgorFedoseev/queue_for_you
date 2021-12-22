@@ -14,6 +14,14 @@ class JobsListTile extends StatelessWidget {
         job.name ?? '',
         style: const TextStyle(
           fontSize: 18,
+          fontWeight: FontWeight.w500,
+        ),
+      ),
+      subtitle: Text(
+        'цена: ${job.price.toString()}',
+        style: const TextStyle(
+          fontSize: 16,
+          color: Colors.blueGrey,
         ),
       ),
       onTap: onTap,
