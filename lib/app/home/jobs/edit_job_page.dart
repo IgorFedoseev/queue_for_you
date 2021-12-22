@@ -38,7 +38,7 @@ class _EditJobPageState extends State<EditJobPage> {
     super.initState();
     if (widget.job != null) {
       _name = widget.job?.name;
-      _ratePerHour = widget.job?.ratePerHour;
+      _ratePerHour = widget.job?.price;
     }
   }
 
@@ -72,7 +72,7 @@ class _EditJobPageState extends State<EditJobPage> {
           );
         } else {
           final id = widget.job?.id ?? documentIdFromCurrentDate();
-          final job = Job(name: _name, ratePerHour: _ratePerHour, id: id);
+          final job = Job(name: _name, price: _ratePerHour, id: id);
           await widget.database.setJob(job);
           Navigator.of(context).pop();
         }

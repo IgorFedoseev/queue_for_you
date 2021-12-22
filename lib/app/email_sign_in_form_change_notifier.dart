@@ -5,8 +5,9 @@ import 'package:new_time_tracker_course/common_widgets/show_exception_alert_dial
 import 'package:new_time_tracker_course/services/firebase_auth.dart';
 import 'package:provider/provider.dart';
 
-class EmailSignInFormChangeNotifier extends StatefulWidget{
-  const EmailSignInFormChangeNotifier({Key? key, required this.model}) : super(key: key);
+class EmailSignInFormChangeNotifier extends StatefulWidget {
+  const EmailSignInFormChangeNotifier({Key? key, required this.model})
+      : super(key: key);
   final EmailSignInChangeModel model;
 
   static Widget create(BuildContext context) {
@@ -24,7 +25,8 @@ class EmailSignInFormChangeNotifier extends StatefulWidget{
       _EmailSignInFormChangeNotifierState();
 }
 
-class _EmailSignInFormChangeNotifierState extends State<EmailSignInFormChangeNotifier> {
+class _EmailSignInFormChangeNotifierState
+    extends State<EmailSignInFormChangeNotifier> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final FocusNode _emailFocusNode = FocusNode();
@@ -68,7 +70,7 @@ class _EmailSignInFormChangeNotifierState extends State<EmailSignInFormChangeNot
   }
 
   List<Widget> _buildChildren() {
-   return [
+    return [
       _buildEmailTextField(),
       const SizedBox(height: 8.0),
       _buildPasswordTextField(model.canSubmit),
@@ -160,13 +162,13 @@ class _EmailSignInFormChangeNotifierState extends State<EmailSignInFormChangeNot
 
   @override
   Widget build(BuildContext context) {
-          return Padding(
-            padding: const EdgeInsets.all(15.0),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: _buildChildren(),
-            ),
-          );
+    return Padding(
+      padding: const EdgeInsets.all(15.0),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: _buildChildren(),
+      ),
+    );
   }
 }

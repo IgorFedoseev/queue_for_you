@@ -5,11 +5,11 @@ class Format {
     final hoursNotNegative = hours < 0.0 ? 0.0 : hours;
     final formatter = NumberFormat.decimalPattern();
     final formatted = formatter.format(hoursNotNegative);
-    return '${formatted}h';
+    return '$formatted ч.';
   }
 
   static String date(DateTime date) {
-    return DateFormat.yMMMd().format(date);
+    return DateFormat('E dd MMM yyyy ', 'ru').format(date);
   }
 
   static String dayOfWeek(DateTime date) {

@@ -5,22 +5,21 @@ import 'package:flutter/services.dart';
 import 'package:new_time_tracker_course/common_widgets/date_time_picker.dart';
 import 'package:new_time_tracker_course/app/home/schedule/format.dart';
 import 'package:new_time_tracker_course/app/home/models/entry.dart';
-import 'package:new_time_tracker_course/app/home/models/job.dart';
 import 'package:new_time_tracker_course/common_widgets/show_exception_alert_dialog.dart';
 import 'package:new_time_tracker_course/services/database.dart';
+import 'package:intl/date_symbol_data_local.dart';
 
 class EntryPage extends StatefulWidget {
-  const EntryPage({Key? key, required this.database, this.job, this.entry}) : super(key: key);
+  const EntryPage({Key? key, required this.database, this.entry})
+      : super(key: key);
   final Database database;
-  final Job? job;
   final Entry? entry;
 
-  static Future<void> show(
-      BuildContext context, Database database, Job job, Entry entry) async {
+  static Future<void> show(BuildContext context, Database database,
+      {Entry? entry}) async {
     await Navigator.of(context, rootNavigator: true).push(
       MaterialPageRoute(
-        builder: (context) =>
-            EntryPage(database: database, job: job, entry: entry),
+        builder: (context) => EntryPage(database: database, entry: entry),
         fullscreenDialog: true,
       ),
     );
@@ -40,6 +39,7 @@ class _EntryPageState extends State<EntryPage> {
   @override
   void initState() {
     super.initState();
+    initializeDateFormatting();
     final start = widget.entry?.start ?? DateTime.now();
     _startDate = DateTime(start.year, start.month, start.day);
     _startTime = TimeOfDay.fromDateTime(start);
@@ -51,26 +51,48 @@ class _EntryPageState extends State<EntryPage> {
     _comment = widget.entry?.comment ?? '';
   }
 
-  Entry _entryFromState() {
-
-    final start = DateTime(_startDate.year, _startDate.month, _startDate.day,
-        _startTime.hour, _startTime.minute);
-    final end = DateTime(_endDate.year, _endDate.month, _endDate.day,
-        _endTime.hour, _endTime.minute);
-    final id = widget.entry?.id ?? documentIdFromCurrentDate();
-    return Entry(
-      id: id,
-      jobId: '_',
-      start: start,
-      end: end,
-      comment: _comment,
-    );
-  }
+  // Entry _entryFromState() {
+  //   final timeStart = DateTime(_startDate.year, _startDate.month, _startDate.day,
+  //       _startTime.hour, _startTime.minute);
+  //   final timeEnd = DateTime(_endDate.year, _endDate.month, _endDate.day,
+  //       _endTime.hour, _endTime.minute);
+  //   final allTheTime = timeStart.millisecondsSinceEpoch - timeEnd.millisecondsSinceEpoch;
+  //   final int daysNumber = timeEnd.difference(timeStart).inHours.toDouble() ~/ 24.0;
+  //   final oneDayTime = allTheTime - allTheTime ~/ (daysNumber * 86400000);
+  //   var start = timeStart.millisecondsSinceEpoch;
+  //   var end = start + oneDayTime;
+  //   final id = widget.entry?.id ?? documentIdFromCurrentDate();
+  //
+  //   // return Entry(
+  //   //   id: id,
+  //   //   start: start,
+  //   //   end: end,
+  //   //   comment: _comment,
+  //   // );
+  // }
 
   Future<void> _setEntryAndDismiss(BuildContext context) async {
     try {
-      final entry = _entryFromState();
-      await widget.database.setEntry(entry);
+      final timeStart = DateTime(_startDate.year, _startDate.month, _startDate.day,
+          _startTime.hour, _startTime.minute);
+      final timeEnd = DateTime(_endDate.year, _endDate.month, _endDate.day,
+          _endTime.hour, _endTime.minute);
+      final allTheTime = timeEnd.millisecondsSinceEpoch - timeStart.millisecondsSinceEpoch;
+      final daysNumber = (allTheTime ~/ 86400000) + 1;
+      final oneDayTime = allTheTime - ((daysNumber - 1) * 86400000);
+      var start = timeStart.millisecondsSinceEpoch;
+      var end = start + oneDayTime;
+      final millisecondsNumbers = daysNumber * 86400000;
+      for (int i = 0; i < millisecondsNumbers; i += 86400000) {
+        final id = widget.entry?.id ?? '${documentIdFromCurrentDate()} + $i';
+        final entry = Entry(
+          id: id,
+          start: DateTime.fromMillisecondsSinceEpoch(start + i),
+          end: DateTime.fromMillisecondsSinceEpoch(end + i),
+          comment: _comment,
+        );
+        await widget.database.setEntry(entry);
+      }
       Navigator.of(context).pop();
     } on FirebaseException catch (e) {
       showExceptionAlertDialog(
@@ -90,7 +112,7 @@ class _EntryPageState extends State<EntryPage> {
         actions: <Widget>[
           TextButton(
             child: Text(
-              widget.entry != null ? 'Update' : 'Create',
+              widget.entry != null ? 'Редактировать' : 'Создать',
               style: const TextStyle(fontSize: 18.0, color: Colors.white),
             ),
             onPressed: () => _setEntryAndDismiss(context),
@@ -119,7 +141,8 @@ class _EntryPageState extends State<EntryPage> {
 
   Widget _buildStartDate() {
     return DateTimePicker(
-      labelText: 'Start',
+      firstLabelText: 'Начало',
+      secondLabelText: 'с',
       selectedDate: _startDate,
       selectedTime: _startTime,
       onSelectedDate: (date) => setState(() => _startDate = date),
@@ -129,7 +152,8 @@ class _EntryPageState extends State<EntryPage> {
 
   Widget _buildEndDate() {
     return DateTimePicker(
-      labelText: 'End',
+      firstLabelText: 'Завершение',
+      secondLabelText: 'до',
       selectedDate: _endDate,
       selectedTime: _endTime,
       onSelectedDate: (date) => setState(() => _endDate = date),
@@ -138,13 +162,19 @@ class _EntryPageState extends State<EntryPage> {
   }
 
   Widget _buildDuration() {
-    final currentEntry = _entryFromState();
-    final durationFormatted = Format.hours(currentEntry.durationInHours);
+    final timeStart = DateTime(_startDate.year, _startDate.month, _startDate.day,
+        _startTime.hour, _startTime.minute);
+    final timeEnd = DateTime(_endDate.year, _endDate.month, _endDate.day,
+        _endTime.hour, _endTime.minute);
+    final allTheTime = timeEnd.millisecondsSinceEpoch - timeStart.millisecondsSinceEpoch;
+    final daysNumber = (allTheTime ~/ 86400000) + 1;
+    final oneDayTime = allTheTime - ((daysNumber - 1) * 86400000);
+    final durationFormatted = ((oneDayTime / 3600000) * 10 ~/ 1) / 10;
     return Row(
       mainAxisAlignment: MainAxisAlignment.end,
       children: <Widget>[
         Text(
-          'Duration: $durationFormatted',
+          'Продолжительность: $durationFormatted ч.',
           style: const TextStyle(fontSize: 18.0, fontWeight: FontWeight.w500),
           maxLines: 1,
           overflow: TextOverflow.ellipsis,

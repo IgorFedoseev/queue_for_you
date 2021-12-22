@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:new_time_tracker_course/app/home/schedule/edit_schedule_page.dart';
+import 'package:new_time_tracker_course/app/home/schedule/andrea_entrie_page.dart';
+import 'package:new_time_tracker_course/services/database.dart';
+import 'package:provider/provider.dart';
 
 class SchedulePage extends StatelessWidget {
   const SchedulePage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final database = Provider.of<Database>(context, listen: false);
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -20,7 +23,7 @@ class SchedulePage extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: const Color.fromRGBO(3, 37, 65, 1),
-        onPressed: () => EditSchedulePage.show(context),
+        onPressed: () => EntryPage.show(context, database),
         child: const Icon(
           Icons.add,
           color: Colors.white,
