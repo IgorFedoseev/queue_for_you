@@ -18,14 +18,21 @@ class FirestoreService {
   Stream<List<T>> collectionStream<T>({
     required String path,
     required T Function(Map<String, dynamic> data, String documentID) builder,
+    int Function(T lhs, T rhs)? sort,
   }) {
     final reference = FirebaseFirestore.instance.collection(path);
     final snapshots = reference.snapshots();
-    return snapshots.map((snapshot) => snapshot.docs
-        .map(
-          (snapshot) => builder(snapshot.data(), snapshot.id),
-        )
-        .toList());
+    return snapshots.map((snapshot) {
+      final result = snapshot.docs
+          .map(
+            (snapshot) => builder(snapshot.data(), snapshot.id),
+          )
+          .toList();
+      if (sort != null) {
+        result.sort(sort);
+      }
+      return result;
+    });
     //builder: (data) => Job.fromMap(data)
     // == Job.fromMap(snapshot.data())
   }

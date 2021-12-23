@@ -1,7 +1,12 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:new_time_tracker_course/app/home/background_delete_panel.dart';
+import 'package:new_time_tracker_course/app/home/jobs/list_item_builder.dart';
 import 'package:new_time_tracker_course/app/home/schedule/edit_schedule_page.dart';
+import 'package:new_time_tracker_course/common_widgets/show_exception_alert_dialog.dart';
 import 'package:new_time_tracker_course/services/database.dart';
 import 'package:provider/provider.dart';
+import 'package:new_time_tracker_course/app/home/models/schedule.dart';
 
 class SchedulePage extends StatelessWidget {
   const SchedulePage({Key? key}) : super(key: key);
@@ -29,9 +34,56 @@ class SchedulePage extends StatelessWidget {
           color: Colors.white,
         ),
       ),
-      body: const Center(
-        child: Text('Расписание'),
+      body: Center(
+        child: _buildContent(context),
       ),
     );
+  }
+
+  Widget _buildContent(BuildContext context) {
+    final database = Provider.of<Database>(context, listen: false);
+    return StreamBuilder<List<Schedule>>(
+      stream: database.scheduleStream(),
+      builder: (context, snapshot) {
+        return ListItemsBuilder<Schedule>(
+          snapshot: snapshot,
+          itemBuilder: (context, schedule) => Dismissible(
+            key: Key('schedule-${schedule.id}'),
+            background: const BackgroundDeletePanel(),
+            direction: DismissDirection.endToStart,
+            onDismissed: (direction) => _delete(context, schedule),
+            child: ListTile(
+              title: Text(
+                'c: ${schedule.start}',
+                style: const TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+              subtitle: Text(
+                'до: ${schedule.end}',
+                style: const TextStyle(
+                  fontSize: 16,
+                  color: Colors.blueGrey,
+                ),
+              ),
+              onTap: () {},
+              // TODO: onTap - edit schedule
+              trailing: const Icon(Icons.chevron_right),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  Future<void> _delete(BuildContext context, Schedule schedule) async {
+    try {
+      final database = Provider.of<Database>(context, listen: false);
+      await database.deleteSchedule(schedule);
+    } on FirebaseException catch (e) {
+      showExceptionAlertDialog(context,
+          title: 'Выполнение прервано', exception: e);
+    }
   }
 }

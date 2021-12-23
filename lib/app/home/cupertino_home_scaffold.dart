@@ -51,7 +51,6 @@ class CupertinoHomeScaffold extends StatelessWidget {
     return BottomNavigationBarItem(
       icon: Icon(
         itemData?.icon,
-        //color: colorBottomTab,
       ),
       label: itemData?.label,
     );

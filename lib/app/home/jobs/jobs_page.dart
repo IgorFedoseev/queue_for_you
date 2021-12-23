@@ -12,20 +12,19 @@ import 'package:provider/provider.dart';
 class JobsPage extends StatelessWidget {
   const JobsPage({Key? key}) : super(key: key);
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          'Специализация',
+          'Список услуг',
           style: TextStyle(
             fontSize: 18.0,
             fontWeight: FontWeight.w600,
           ),
         ),
         backgroundColor: const Color.fromRGBO(3, 37, 65, 1),
-        elevation: 1.0,
+        elevation: 3.0,
       ),
       body: _buildContent(context),
       floatingActionButton: FloatingActionButton(

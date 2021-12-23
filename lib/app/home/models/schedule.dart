@@ -1,6 +1,6 @@
 
-class Entry {
-  Entry({
+class Schedule {
+  Schedule({
     required this.id,
     required this.start,
     required this.end,
@@ -12,13 +12,10 @@ class Entry {
   DateTime end;
   String? comment;
 
-  double get durationInHours =>
-      end.difference(start).inMinutes.toDouble() / 60.0;
-
-  factory Entry.fromMap(Map<dynamic, dynamic> value, String id) {
+  factory Schedule.fromMap(Map<dynamic, dynamic> value, String id) {
     final int startMilliseconds = value['start'];
     final int endMilliseconds = value['end'];
-    return Entry(
+    return Schedule(
       id: id,
       start: DateTime.fromMillisecondsSinceEpoch(startMilliseconds),
       end: DateTime.fromMillisecondsSinceEpoch(endMilliseconds),

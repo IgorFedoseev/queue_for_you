@@ -30,7 +30,7 @@ class _EditJobPageState extends State<EditJobPage> {
   final _fromKey = GlobalKey<FormState>();
 
   String? _name;
-  int? _ratePerHour;
+  int? price;
   bool _isLoading = false;
 
   @override
@@ -38,7 +38,7 @@ class _EditJobPageState extends State<EditJobPage> {
     super.initState();
     if (widget.job != null) {
       _name = widget.job?.name;
-      _ratePerHour = widget.job?.price;
+      price = widget.job?.price;
     }
   }
 
@@ -72,7 +72,7 @@ class _EditJobPageState extends State<EditJobPage> {
           );
         } else {
           final id = widget.job?.id ?? documentIdFromCurrentDate();
-          final job = Job(name: _name, price: _ratePerHour, id: id);
+          final job = Job(name: _name, price: price, id: id);
           await widget.database.setJob(job);
           Navigator.of(context).pop();
         }
@@ -167,8 +167,8 @@ class _EditJobPageState extends State<EditJobPage> {
           signed: false, // по умолчанию уже так и есть
           decimal: false, // по умолчанию уже так и есть
         ),
-        initialValue: _ratePerHour != null ? '$_ratePerHour' : null,
-        onSaved: (value) => _ratePerHour = int.tryParse(value ?? '') ?? 0,
+        initialValue: price != null ? '$price' : null,
+        onSaved: (value) => price = int.tryParse(value ?? '') ?? 0,
         enabled: _isLoading == false,
       ),
     ];

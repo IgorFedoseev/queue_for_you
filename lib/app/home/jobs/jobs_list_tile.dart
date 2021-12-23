@@ -18,7 +18,7 @@ class JobsListTile extends StatelessWidget {
         ),
       ),
       subtitle: Text(
-        'цена: ${job.price.toString()}',
+        'цена: ${job.price}',
         style: const TextStyle(
           fontSize: 16,
           color: Colors.blueGrey,

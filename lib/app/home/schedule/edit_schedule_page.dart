@@ -3,7 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:new_time_tracker_course/common_widgets/date_time_picker.dart';
-import 'package:new_time_tracker_course/app/home/models/entry.dart';
+import 'package:new_time_tracker_course/app/home/models/schedule.dart';
 import 'package:new_time_tracker_course/common_widgets/show_alert_dialog.dart';
 import 'package:new_time_tracker_course/common_widgets/show_exception_alert_dialog.dart';
 import 'package:new_time_tracker_course/services/database.dart';
@@ -13,10 +13,10 @@ class EditSchedulePage extends StatefulWidget {
   const EditSchedulePage({Key? key, required this.database, this.entry})
       : super(key: key);
   final Database database;
-  final Entry? entry;
+  final Schedule? entry;
 
   static Future<void> show(BuildContext context, Database database,
-      {Entry? entry}) async {
+      {Schedule? entry}) async {
     await Navigator.of(context, rootNavigator: true).push(
       MaterialPageRoute(
         builder: (context) =>
@@ -63,28 +63,33 @@ class _EditSchedulePageState extends State<EditSchedulePage> {
           _endTime.hour, _endTime.minute);
       final allTheTime =
           timeEnd.millisecondsSinceEpoch - timeStart.millisecondsSinceEpoch;
-      final daysNumber = (allTheTime ~/ 86400000) + 1;
+      int daysNumber = (allTheTime ~/ 86400000) + 1;
       final oneDayTime = allTheTime - ((daysNumber - 1) * 86400000);
-      var start = timeStart.millisecondsSinceEpoch;
-      var end = start + oneDayTime;
-      final millisecondsNumbers = daysNumber * 86400000;
+      int start = timeStart.millisecondsSinceEpoch;
+      int end = start + oneDayTime;
+      if (start == end) {
+        end = end + 86400000;
+        daysNumber = daysNumber - 1;
+      } final millisecondsNumbers = daysNumber * 86400000;
       if (timeEnd.millisecondsSinceEpoch > timeStart.millisecondsSinceEpoch) {
-        for (int i = 0; i < millisecondsNumbers; i += 86400000) {
-          final id = widget.entry?.id ?? '${documentIdFromCurrentDate()} + $i';
-          final entry = Entry(
+         for (int i = 0; i < millisecondsNumbers; i += 86400000) {
+          final id = widget.entry?.id ??
+              '${documentIdFromCurrentDate()}.${i ~/ 86400000 + 1}';
+          final entry = Schedule(
             id: id,
             start: DateTime.fromMillisecondsSinceEpoch(start + i),
             end: DateTime.fromMillisecondsSinceEpoch(end + i),
             comment: _comment,
           );
-          await widget.database.setEntry(entry);
+          await widget.database.setSchedule(entry);
         }
         Navigator.of(context).pop();
       } else {
         showAlertDialog(
           context,
           title: 'Некорректные данные',
-          content: 'Время окончания рабочего дня не должно быть раньше начала или совпадать с ним',
+          content:
+              'Время окончания рабочего дня не должно быть раньше начала или совпадать с ним',
           defaultActionText: 'ОК',
         );
       }
@@ -131,7 +136,7 @@ class _EditSchedulePageState extends State<EditSchedulePage> {
     );
   }
 
-  Widget _buildContent(){
+  Widget _buildContent() {
     if (_isLoading) {
       return const Center(
         child: CircularProgressIndicator(),
