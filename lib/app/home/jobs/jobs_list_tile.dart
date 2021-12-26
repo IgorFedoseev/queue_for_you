@@ -2,14 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:new_time_tracker_course/app/home/models/job.dart';
 
 class JobsListTile extends StatelessWidget {
-  const JobsListTile({Key? key, required this.job, this.onTap})
+  const JobsListTile({Key? key, required this.job, required this.onTap})
       : super(key: key);
   final Job job;
-  final VoidCallback? onTap;
+  final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
     return ListTile(
+      tileColor: Colors.white,
       title: Text(
         job.name ?? '',
         style: const TextStyle(

@@ -10,17 +10,17 @@ import 'package:new_time_tracker_course/services/database.dart';
 import 'package:intl/date_symbol_data_local.dart';
 
 class EditSchedulePage extends StatefulWidget {
-  const EditSchedulePage({Key? key, required this.database, this.entry})
+  const EditSchedulePage({Key? key, required this.database, this.schedule})
       : super(key: key);
   final Database database;
-  final Schedule? entry;
+  final Schedule? schedule;
 
   static Future<void> show(BuildContext context, Database database,
-      {Schedule? entry}) async {
+      {Schedule? schedule}) async {
     await Navigator.of(context, rootNavigator: true).push(
       MaterialPageRoute(
         builder: (context) =>
-            EditSchedulePage(database: database, entry: entry),
+            EditSchedulePage(database: database, schedule: schedule),
       ),
     );
   }
@@ -41,15 +41,15 @@ class _EditSchedulePageState extends State<EditSchedulePage> {
   void initState() {
     super.initState();
     initializeDateFormatting();
-    final start = widget.entry?.start ?? DateTime.now();
+    final start = widget.schedule?.start ?? DateTime.now();
     _startDate = DateTime(start.year, start.month, start.day);
     _startTime = TimeOfDay.fromDateTime(start);
 
-    final end = widget.entry?.end ?? DateTime.now();
+    final end = widget.schedule?.end ?? DateTime.now();
     _endDate = DateTime(end.year, end.month, end.day);
     _endTime = TimeOfDay.fromDateTime(end);
 
-    _comment = widget.entry?.comment ?? '';
+    _comment = widget.schedule?.comment ?? '';
   }
 
   Future<void> _setEntryAndDismiss(BuildContext context) async {
@@ -73,7 +73,7 @@ class _EditSchedulePageState extends State<EditSchedulePage> {
       } final millisecondsNumbers = daysNumber * 86400000;
       if (timeEnd.millisecondsSinceEpoch > timeStart.millisecondsSinceEpoch) {
          for (int i = 0; i < millisecondsNumbers; i += 86400000) {
-          final id = widget.entry?.id ??
+          final id = widget.schedule?.id ??
               '${documentIdFromCurrentDate()}.${i ~/ 86400000 + 1}';
           final entry = Schedule(
             id: id,
@@ -112,9 +112,9 @@ class _EditSchedulePageState extends State<EditSchedulePage> {
       appBar: AppBar(
         centerTitle: true,
         elevation: 3.0,
-        title: const Text(
-          'Создать график', //  widget.entry == null ? //: 'Редактировать',
-          style: TextStyle(
+        title: Text(
+          widget.schedule == null ? 'Создать график' : 'Редактировать',
+          style: const TextStyle(
             fontSize: 18.0,
             fontWeight: FontWeight.w600,
           ),
@@ -122,7 +122,7 @@ class _EditSchedulePageState extends State<EditSchedulePage> {
         actions: <Widget>[
           IconButton(
             icon: Icon(
-              widget.entry != null ? Icons.edit : Icons.add,
+              widget.schedule != null ? Icons.edit : Icons.add,
               size: 28.0,
             ),
             onPressed: () =>

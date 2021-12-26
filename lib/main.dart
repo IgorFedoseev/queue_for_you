@@ -18,6 +18,7 @@ class MyApp extends StatelessWidget {
     return Provider<AuthBase>(
       create: (context) => Auth(),
       child: MaterialApp(
+
         title: 'Time Tracker App',
         theme: ThemeData(
           primarySwatch: Colors.indigo,

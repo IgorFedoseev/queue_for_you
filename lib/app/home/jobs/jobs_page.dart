@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:new_time_tracker_course/app/home/background_delete_panel.dart';
 import 'package:new_time_tracker_course/app/home/jobs/edit_job_page.dart';
 import 'package:new_time_tracker_course/app/home/jobs/jobs_list_tile.dart';
-import 'package:new_time_tracker_course/app/home/jobs/list_item_builder.dart';
+import 'package:new_time_tracker_course/app/home/jobs/jobs_list_item_builder.dart';
 import 'package:new_time_tracker_course/app/home/models/job.dart';
 import 'package:new_time_tracker_course/common_widgets/show_exception_alert_dialog.dart';
 import 'package:new_time_tracker_course/services/database.dart';
@@ -44,7 +44,7 @@ class JobsPage extends StatelessWidget {
     return StreamBuilder<List<Job>>(
       stream: database.jobsStream(),
       builder: (context, snapshot) {
-        return ListItemsBuilder<Job>(
+        return JobsListItemsBuilder<Job>(
           snapshot: snapshot,
           itemBuilder: (context, job) => Dismissible(
             key: Key('job-${job.id}'),

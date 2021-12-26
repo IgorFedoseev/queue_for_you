@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:new_time_tracker_course/app/home/jobs/empty_content.dart';
 
-typedef ItemWidgetBuilder<T> = Widget Function(BuildContext context, T item);
+typedef JobsItemWidgetBuilder<T> = Widget Function(BuildContext context, T item);
 
-class ListItemsBuilder<T> extends StatelessWidget {
-  const ListItemsBuilder(
+class JobsListItemsBuilder<T> extends StatelessWidget {
+  const JobsListItemsBuilder(
       {Key? key, required this.snapshot, required this.itemBuilder})
       : super(key: key);
   final AsyncSnapshot<List<T>> snapshot;
-  final ItemWidgetBuilder<T> itemBuilder;
+  final JobsItemWidgetBuilder<T> itemBuilder;
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +33,7 @@ class ListItemsBuilder<T> extends StatelessWidget {
   Widget _buildList(List<T> items) {
     return ListView.separated(
       separatorBuilder: (context, index) => const Divider(
-        height: 0.5,
+        height: 0.3,
         thickness: 1,
       ),
       itemCount: items.length + 2,

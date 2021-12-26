@@ -1,8 +1,9 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:new_time_tracker_course/app/home/background_delete_panel.dart';
-import 'package:new_time_tracker_course/app/home/jobs/list_item_builder.dart';
+import 'package:new_time_tracker_course/app/home/jobs/jobs_list_item_builder.dart';
 import 'package:new_time_tracker_course/app/home/schedule/edit_schedule_page.dart';
+import 'package:new_time_tracker_course/app/home/schedule/schedule_list_tile.dart';
 import 'package:new_time_tracker_course/common_widgets/show_exception_alert_dialog.dart';
 import 'package:new_time_tracker_course/services/database.dart';
 import 'package:provider/provider.dart';
@@ -37,39 +38,28 @@ class SchedulePage extends StatelessWidget {
       body: Center(
         child: _buildContent(context),
       ),
+      backgroundColor: Colors.blueGrey[50],
     );
   }
 
   Widget _buildContent(BuildContext context) {
     final database = Provider.of<Database>(context, listen: false);
+
     return StreamBuilder<List<Schedule>>(
       stream: database.scheduleStream(),
       builder: (context, snapshot) {
-        return ListItemsBuilder<Schedule>(
+        return JobsListItemsBuilder<Schedule>(
           snapshot: snapshot,
           itemBuilder: (context, schedule) => Dismissible(
             key: Key('schedule-${schedule.id}'),
             background: const BackgroundDeletePanel(),
             direction: DismissDirection.endToStart,
             onDismissed: (direction) => _delete(context, schedule),
-            child: ListTile(
-              title: Text(
-                'c: ${schedule.start}',
-                style: const TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w500,
-                ),
+            child: ScheduleListTile(
+              schedule: schedule,
+              onTap: () => EditSchedulePage.show(
+                context, database, schedule: schedule
               ),
-              subtitle: Text(
-                'до: ${schedule.end}',
-                style: const TextStyle(
-                  fontSize: 16,
-                  color: Colors.blueGrey,
-                ),
-              ),
-              onTap: () {},
-              // TODO: onTap - edit schedule
-              trailing: const Icon(Icons.chevron_right),
             ),
           ),
         );
@@ -86,4 +76,5 @@ class SchedulePage extends StatelessWidget {
           title: 'Выполнение прервано', exception: e);
     }
   }
+
 }

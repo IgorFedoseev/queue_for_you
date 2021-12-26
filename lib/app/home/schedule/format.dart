@@ -6,6 +6,10 @@ class Format {
     return DateFormat('E dd MMM yyyy ', 'ru').format(date);
   }
 
+  static String dateSchedule(DateTime date) {
+    return DateFormat('dd.MM.yyyy').format(date);
+  }
+
   static String dayOfWeek(DateTime date) {
     return DateFormat.E().format(date);
   }
