@@ -44,7 +44,6 @@ class SchedulePage extends StatelessWidget {
 
   Widget _buildContent(BuildContext context) {
     final database = Provider.of<Database>(context, listen: false);
-
     return StreamBuilder<List<Schedule>>(
       stream: database.scheduleStream(),
       builder: (context, snapshot) {
